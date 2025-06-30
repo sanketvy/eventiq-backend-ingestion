@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: eventiq-ingestion
+  config:
+    import: "consul:localhost:8500"
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        hostname: host.docker.internal
+        prefer-ip-address: false
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+        instance-id: ${spring.application.name}-${server.port}
+      config:
+        enabled: true
+        format: yaml
+        data-key: data
+server:
+  port: 9000
