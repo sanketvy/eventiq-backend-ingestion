@@ -8,7 +8,7 @@ spring:
       host: localhost
       port: 8500
       discovery:
-        hostname: host.docker.internal
+        hostname: localhost
         prefer-ip-address: false
         health-check-path: /actuator/health
         health-check-interval: 10s
@@ -18,4 +18,4 @@ spring:
         format: yaml
         data-key: data
 server:
-  port: 9000
+  port: 9050

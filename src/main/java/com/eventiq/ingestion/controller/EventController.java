@@ -1,6 +1,7 @@
 package com.eventiq.ingestion.controller;
 
 import com.eventiq.ingestion.dto.Event;
+import com.eventiq.ingestion.external.IPInfo;
 import com.eventiq.ingestion.service.EventService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.UnknownHostException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/public/event")
@@ -22,15 +24,13 @@ public class EventController {
     EventService eventService;
 
     @Autowired
-    public EventController(EventService eventService){
+    public EventController(EventService eventService, IPInfo ipInfo){
         this.eventService = eventService;
     }
 
     @PostMapping
-    public ResponseEntity<String> processEvent(@RequestBody Event event, HttpServletRequest httpRequest) throws UnknownHostException {
-        log.info(httpRequest.getRemoteHost().toString());
-        log.info(httpRequest.getRemoteAddr().toString());
-        log.info(event.toString());
+    public ResponseEntity<String> processEvent(HttpServletRequest httpRequest, @RequestBody Event event) throws UnknownHostException {
+        eventService.processEvent(httpRequest, event);
         return ResponseEntity.status(HttpStatus.OK).body("Event Processed.");
     }
 }
