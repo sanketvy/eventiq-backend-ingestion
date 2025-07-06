@@ -3,6 +3,8 @@ spring:
     name: eventiq-ingestion
   config:
     import: "consul:localhost:8500"
+  kafka:
+    bootstrap-servers: localhost:9092
   cloud:
     consul:
       host: localhost
@@ -17,5 +19,18 @@ spring:
         enabled: true
         format: yaml
         data-key: data
+    stream:
+      default:
+        binder: kafka
+      bindings:
+        pushEvent-out-0:
+          destination: eventiq-events-topic
+      binders:
+        kafka:
+          type: kafka
+          environment:
+            spring:
+              kafka:
+                bootstrap-servers: localhost:9092
 server:
   port: 9050
