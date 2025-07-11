@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class AppConfiguration {
 
-    @Bean
+    @Bean(autowireCandidate = false)
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override

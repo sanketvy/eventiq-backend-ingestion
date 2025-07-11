@@ -12,6 +12,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -29,11 +30,15 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public void processEvent(HttpServletRequest httpRequest, Event event) {
-        Map<String, Object> data = ipInfo.getIpInfo(httpRequest.getRemoteAddr());
-        event.getMetaData().put("location", data.get("city"));
-        event.getMetaData().put("country", data.get("country"));
-        event.getMetaData().put("lon", data.get("lon"));
-        event.getMetaData().put("lat", data.get("lat"));
+        Map<String, Object> data = new HashMap<>();
+        if(!httpRequest.getRemoteAddr().equals("127.0.0.1")){
+            data = ipInfo.getIpInfo(httpRequest.getRemoteAddr());
+        }
+        event.getMetaData().put("location", data.getOrDefault("city", "Localhost"));
+        event.getMetaData().put("country", data.getOrDefault("country", "Localhost"));
+        event.getMetaData().put("lon", data.getOrDefault("lon", "Localhost"));
+        event.getMetaData().put("lat", data.getOrDefault("lat", "Localhost"));
+        event.getMetaData().put("ip", httpRequest.getRemoteAddr());
         event.getMetaData().put("browser", httpRequest.getHeader("User-Agent"));
         streamBridge.send(Constants.EVENTS_TOPIC, MessageBuilder.withPayload(event).setHeader(KafkaHeaders.KEY, event.getProjectId().getBytes(StandardCharsets.UTF_8)).build());
         log.info(event.toString());
