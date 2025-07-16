@@ -34,8 +34,8 @@ public class EventServiceImpl implements EventService {
         if(!httpRequest.getRemoteAddr().equals("127.0.0.1")){
             data = ipInfo.getIpInfo(httpRequest.getRemoteAddr());
         }
-        event.getMetaData().put("location", data.getOrDefault("city", "Localhost"));
-        event.getMetaData().put("country", data.getOrDefault("country", "Localhost"));
+        event.getMetaData().put("location", data.getOrDefault("city", "Pune"));
+        event.getMetaData().put("country", data.getOrDefault("country", "India"));
         event.getMetaData().put("lon", data.getOrDefault("lon", "Localhost"));
         event.getMetaData().put("lat", data.getOrDefault("lat", "Localhost"));
         event.getMetaData().put("ip", httpRequest.getRemoteAddr());
